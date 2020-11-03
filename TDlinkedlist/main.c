@@ -10,7 +10,7 @@ void opção(void)
     printf("3 - Consultar lista matricula  \n");
     printf("4 - insere no final da lista   \n");
     printf("5 - insere no inicio da lista  \n");
-    printf("6 - insere na lista ordenada  \n");
+    printf("6 - imprime lista reversa  \n");
     printf("7 - remove aluno pela posição  \n");
     printf("8 - remove a 1° posição da lista  \n");
     printf("9 - Tamanho da lista  \n");

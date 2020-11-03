@@ -239,22 +239,21 @@ int list_erase(TDLinkedList *li, int pos){//remove posição
   if (li == NULL){
     return INVALID_NULL_POINTER;
   }
+  else if(pos > li->size){
+    return OUT_OF_RANGE;
+  }
+  else if(li->size == 0){
+    return OUT_OF_RANGE;
+  }
+  else if(pos == 0){
+    return OUT_OF_RANGE;
+  }
+
   else{
-    list_node *aux, *prev;
+    list_node *aux;
     aux = li->begin;
     int i = 1;
-    if(pos > li->size){
-      return OUT_OF_RANGE;
-    }
-    else{
-    if(pos == 0){
-      return OUT_OF_RANGE;
-    }
-    else{
-    if(li->size == 0){
-      return OUT_OF_RANGE;
-    }
-    else{
+
     if(pos == 1){
       li->begin = li->begin->next;
       free(li->begin->prev);
@@ -283,10 +282,7 @@ int list_erase(TDLinkedList *li, int pos){//remove posição
     }
     }
     }
-    }
-  }
-  }
-  return SUCCESS;
+return SUCCESS;
 
 }
 
@@ -294,10 +290,14 @@ int list_erase_mat(TDLinkedList *li, int mat){//remove matricula
   if (li == NULL){
     return INVALID_NULL_POINTER;
   }
+  else if(li->size == 0){
+    return OUT_OF_RANGE;
+  }
   else{
-    list_node *aux, *prev;
+    list_node *aux;
     aux = li->begin;
-    int i = 0;
+    int i = 1;
+
     while(aux != NULL && aux->data.matricula != mat){
       aux = aux->next;
       i++;
@@ -305,11 +305,6 @@ int list_erase_mat(TDLinkedList *li, int mat){//remove matricula
     if(aux == NULL){
       return OUT_OF_MEMORY;
     }
-    else{
-      if(li->size == 0){
-        return OUT_OF_RANGE;
-    }
-    
     else{
       if(i == 1){
         li->begin = aux->next;
@@ -334,7 +329,6 @@ int list_erase_mat(TDLinkedList *li, int mat){//remove matricula
     }
     }
   return SUCCESS;  
-  }
 }
 
 int list_find_pos(TDLinkedList *li, int pos, struct aluno *al){//consultar aluno posição
@@ -342,7 +336,7 @@ int list_find_pos(TDLinkedList *li, int pos, struct aluno *al){//consultar aluno
     return INVALID_NULL_POINTER;
   }
   else{
-    list_node *aux, *prev;
+    list_node *aux;
     aux = li->begin;
     int i = 1;
     if(pos > li->size){
@@ -357,7 +351,7 @@ int list_find_pos(TDLinkedList *li, int pos, struct aluno *al){//consultar aluno
       return OUT_OF_RANGE;
     }
     else{
-      while(aux != NULL && i < pos + 1 ){
+      while(aux != NULL && i < pos ){
         aux = aux->next;
         i++;
       }
