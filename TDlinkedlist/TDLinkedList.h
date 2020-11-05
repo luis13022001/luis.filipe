@@ -22,5 +22,5 @@ int list_find_mat(TDLinkedList *li, int nmat, struct aluno *al);//consultar alun
 int list_front(TDLinkedList *li, struct aluno *al);//consultar elemento da frente 
 int list_back(TDLinkedList *li, struct aluno *al);//consultar ultimo elemento 
 int list_get_pos(TDLinkedList *li, int nmat, int *pos);//consultar em qual posição está uma matrícula(fiz)
-int list_print_forward(TDLinkedList *li); 
-int list_print_reverse(TDLinkedList *li);
+int list_print_forward(TDLinkedList *li); //print normal
+int list_print_reverse(TDLinkedList *li);//print reverso

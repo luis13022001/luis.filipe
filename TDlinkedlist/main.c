@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void opção(void)
+void opcao(void)
 {
     printf("1 - Criar a Lista  \n");
     printf("2 - Consultar lista posição  \n");
@@ -44,10 +44,9 @@ void menu()
     struct aluno al;
     int qtd,tam;
     int ret;
-    int val;
     int pos, mat;
     while(1){
-        opção();
+        opcao();
         switch (pegaropcao())
     {
 

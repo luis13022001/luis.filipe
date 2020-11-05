@@ -9,7 +9,7 @@ typedef struct Stack Stack;
 #include "../common/alunos.h"
 
 Stack *create_stack();
-
+int stack_free(Stack *st);
 int stack_push(Stack *st, struct aluno al);//insere no final
 int stack_pop(Stack *st);//remove final
 int stack_size(Stack *st);//tamanho da pilha ou se está vazia

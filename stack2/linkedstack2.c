@@ -67,3 +67,13 @@ int stack_find_pos(Stack *st, int pos, struct aluno *al){//consultar topo
     }
 
 }
+
+int stack_free(Stack *st){//libera lista e pilha
+ if(st == NULL){
+   return -1;
+ }else{
+  list_free(st->data);  
+  free(st);   
+  return SUCCESS;
+ }
+}

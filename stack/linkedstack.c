@@ -67,3 +67,13 @@ int stack_size(Stack *st){//ver se está vazia ou tamanho
 
 
 }
+
+int stack_free(Stack *st){//libera lsita e pilha
+ if(st == NULL){
+   return -1;
+ }else{
+  libera_lista(st->data);  
+  free(st);   
+  return SUCCESS;
+ }
+}
