@@ -5,7 +5,6 @@
 #define ELEM_NOT_FOUND -4
 #define ERRO_SORTED -5
 
-
 typedef struct Stack Stack;
 #include "../common/alunos.h"
 
@@ -13,5 +12,5 @@ Stack *create_stack();
 
 int stack_push(Stack *st, struct aluno al);//insere no final
 int stack_pop(Stack *st);//remove final
+int stack_size(Stack *st);//tamanho da pilha ou se está vazia
 int stack_find_pos(Stack *st, int pos, struct aluno *al);//consulta topo
-int stack_size(Stack *st);//ver tamanho ou se está vazia

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 
-
 struct lista{
   int qtd;
   struct aluno dados[MAX];

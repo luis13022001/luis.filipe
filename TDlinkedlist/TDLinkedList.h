@@ -3,12 +3,8 @@
 #define OUT_OF_MEMORY -2 
 #define OUT_OF_RANGE -3 
 #define ELEM_NOT_FOUND -4
+#include "../common/alunos.h"
 
-struct aluno{
-  int matricula;
-  char nome[30];
-  float n1,n2,n3;
-};
 typedef struct TDLinkedList TDLinkedList;
 
 TDLinkedList* list_create();//cria lista (fiz)

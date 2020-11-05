@@ -7,11 +7,10 @@
 
 
 typedef struct Stack Stack;
-#include "../common/alunos.h"
 
 Stack *create_stack();
 
-int stack_push(Stack *st, struct aluno al);//insere no final
+int stack_push(Stack *st, char ch);//insere no final
 int stack_pop(Stack *st);//remove final
-int stack_find_pos(Stack *st, int pos, struct aluno *al);//consulta topo
+int stack_find_pos(Stack *st, int pos, char ch);//consulta topo
 int stack_size(Stack *st);//ver tamanho ou se está vazia

@@ -4,12 +4,8 @@
 #define OUT_OF_RANGE -3 
 #define ELEM_NOT_FOUND -4
 #define ERRO_SORTED -5
+#include "../common/alunos.h"
 
-struct aluno{
-  int matricula;
-  char nome[30];
-  float n1,n2,n3;
-};
 typedef struct TLinkedList TLinkedList;
 
 TLinkedList* list_create();//fiz

@@ -1,5 +1,5 @@
 #ifndef ALUNO
-
+#define ALUNO
 struct aluno{
   int matricula;
   char nome[30];
