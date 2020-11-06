@@ -40,11 +40,12 @@ int list_splice(List *dest, List *source, int pos){
     source->begin->prev = aux;
     source->end->next = aux->next->prev;
     aux->next->prev = source->end;
-    
+    source->begin = NULL;
+    source->end = NULL;
+    dest->size = dest->size + source->size;
+    source->size = 0;
 
-
-
-    }
+}
     
 
 
