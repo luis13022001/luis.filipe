@@ -10,7 +10,6 @@ int list_splice(List *dest, List *source, int pos){
     }
     else{
     dlnode *aux;
-    dlnode *aux2;
     if(pos == dest->size || pos == dest->size +1){
         dest->end->next = source->begin;
         source->begin->prev = dest->end;
@@ -32,7 +31,6 @@ int list_splice(List *dest, List *source, int pos){
         }
     else{
     aux = dest->begin;
-    aux2 = source->begin;
     int i = 1;
     while(i < pos){
         aux = aux->next;
@@ -40,6 +38,8 @@ int list_splice(List *dest, List *source, int pos){
     }
     aux->next = source->begin;
     source->begin->prev = aux;
+    source->end->next = aux->next->prev;
+    aux->next->prev = source->end;
     
 
 
@@ -51,4 +51,5 @@ int list_splice(List *dest, List *source, int pos){
 
 }
 }
+return 0;//sucesso
 }
