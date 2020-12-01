@@ -73,11 +73,12 @@ int enqueue(TQueue *fl, struct aluno al){
       return INVALID_NULL_POINTER;
     }
     else{
+      fl->tamatual = newsize;
       for(int i = fl->front; i < newsize; i++){
         fl->data[i+1] = fl->data[i];
       }
       fl->data = aux;
-      fl->tamatual = newsize;
+  
     }
   }
   }
