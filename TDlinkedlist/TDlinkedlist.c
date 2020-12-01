@@ -105,6 +105,7 @@ int list_push_back(TDLinkedList *li, struct aluno al){// insere no final
       li->begin = node;
       li->end = node;
       li->size = 1;
+      return SUCCESS;
     }
     else
     {

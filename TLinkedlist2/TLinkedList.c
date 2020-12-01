@@ -187,12 +187,16 @@ int list_pop_front(TLinkedList *li){//remova começo
     if(li == NULL){
       return INVALID_NULL_POINTER;
     }
+    if(li->size == 0){
+      return OUT_OF_RANGE;
+    }
+    else{
     list_node *aux = li->head;//aux recebe a cabeça
     li->head = aux->next;//cabeça recebe a proxima posição
 
     free(aux);
     li->size--;
-
+    }
     return SUCCESS;
 }
 
