@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "TLinkedList.h"
+#include "circular.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,7 +29,7 @@ unsigned int pegaropcao(void)
     unsigned int valor = 0;
     printf("Escolha uma opção: ");
     scanf("%u", &valor); //ler o valor da opção
-    while ( !(0 <= valor && valor <= 16))
+    while ( !(0 <= valor && valor <= 17))
     {
     printf("opção inválida!\n");
     printf("Digite uma opção: ");
@@ -53,28 +53,7 @@ void menu()
 
         case 1:
   alunos_ic= list_create();
-  struct aluno b[10] = {{1,"Izaac",7.0,8.0,9.0},
-                          {2,"Luis",7.5,8.7,6.8},
-                          {3,"Gabriel",9.7,6.7,8.4},
-                          {4,"Carlos",5.7,6.1,7.4},
-                          {5,"Fabiola",9.0,5.1,8.4},
-                          {6,"Mariana",6.7,6.4,7.5},
-                          {7,"Gabriella",4.7,9.1,7.8},
-                          {8,"Mila",8.7,6.8,7.5},
-                          {9,"Heitor",6.5,6.8,9.4},
-                          {10,"Bruno",9.7,7.3,8.6}};
 
-printf("Tamanho da lista que deseja criar (valor minimo  10)? ");
-  scanf("%d", &tam);
-    if (tam<10){
-      printf("\nError!\n\n");
-        return menu();
-    }
-    TLinkedList* alunos_ic = list_create(tam);
-      for(int i=0; i< 10; i++){
-        list_push_back(alunos_ic, b[i]);
-      }
-    list_print(alunos_ic);
 break;  
 
     case 2:
@@ -272,7 +251,7 @@ break;
       printf("ERROOO!!\n\n");
     }
     else if(ret == -3){
-      printf("não há elementos na matriz!!\n\n");
+      printf("não há elementos na lista!!\n\n");
     }
     else{
       printf("elemento removido com sucesso!!\n\n");

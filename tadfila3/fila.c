@@ -24,11 +24,11 @@ TQueue *create_queue(int tam){
   fl->taminic = tam;
   fl->tamatual = tam;
   fl->data = malloc(tam *sizeof(struct aluno));
-    if(fl->dados == NULL){  
+    if(fl->data == NULL){  
     free(fl);
     return   NULL;
 }
-  return li; 
+  return fl; 
 
 }
 int free_queue(TQueue *fl){
@@ -37,24 +37,6 @@ int free_queue(TQueue *fl){
   free(fl);
   return SUCCESS;
 }
-
-int realoca_lista(Lista *li){
-  struct aluno *aux;
-  int tam;
-  li->tamatual += li->taminic;
-  
-    if(li == NULL){  
-    return -1;
-  }
-  aux = realloc(li->dados,li->tamatual * sizeof(struct aluno));
-  li->dados = aux;
-  
-  if(li == NULL){  
-    return -1;
-  }
-  return 0;
-}
-
 
 int enqueue(TQueue *fl, struct aluno al){
   
@@ -67,7 +49,7 @@ int enqueue(TQueue *fl, struct aluno al){
   else {
     if(fl->size == fl->tamatual ){
     int newsize = (fl->size/fl->taminic +1) * fl->taminic;
-    aluno *aux = realloc(fl->data, sizeof(aluno) * newsize);
+    struct aluno *aux = realloc(fl->data, sizeof(struct aluno) * newsize);
 
     if(aux == NULL){
       return INVALID_NULL_POINTER;
@@ -116,7 +98,7 @@ int dequeue(TQueue *fl){//remover inicio
     return OUT_OF_RANGE;
 }
   fl->front = (fl->front+1)%fl->tamatual;
-  fi->size--;
+  fl->size--;
   return SUCCESS;
 }
 
@@ -152,18 +134,57 @@ int queuefull(TQueue* fl){
 }
 
 
-int compact_queue(TQueue* fl){
-  struct student *newlist;
-  if(fl == NULL)
-    return INVALID_NULL_POINTER;
-  int aux = ceil(fl->size/fl->taminic)*fl->MIN;
-  fl->tamatual = aux;
-  newlist = realloc(fl->data,aux*sizeof(struct student));
-  fl->data = newlist;
-  fl->front = 0;
-  fl->rear = fl->size;
+int queue_compact(TQueue* fl){
+if(fl == NULL) //Se não tiver sido carregada
+return -1;
+
+ if(fl->size == 0)
+ return INVALID_NULL_POINTER;
+
+ int quantidade; //recebe qtd como float
+ quantidade = fl->size; //Para usar ceil a qtd deveria ser float
+
+ int count = 0;
+  if(fl->front < fl->rear){
+    while(count < fl->size){
+      fl->data[count] = fl->data[fl->front];
+      count++;
+      fl->front++;
+    }
+    fl->front = 0;
+    fl->rear = fl->size;
+    fl->size = (ceil((float)quantidade/fl->taminic))*fl->taminic;
+    return 0;
+  }else if(fl->front > fl->rear){
+    struct aluno temp[fl->size];
+    while(fl->front < fl->size){
+        temp[count] = fl->data[fl->front];
+        count++;
+        fl->front++;
+    }
+    int count2 = 0;
+    while(count2 < fl->rear){
+      temp[count] = fl->data[count2];
+      count++;
+      count2++;
+    }
+    for(count = 0; count < fl->size; count++){
+      fl->data[count] = temp[count];
+/*printf("     %d\t    %s\t%.3f\t\t%.3f\t\t%.3f\n",
+fl->data[count].matricula,
+fl->data[count].nome,fl->data[count].n1,
+fl->data[count].n2,
+fl->data[count].n3);
+printf("\n");
   
-  return SUCCESS;
+  */  }
+    fl->front = 0;
+    fl->rear = fl->size;
+    fl->size = (ceil((float)quantidade/fl->taminic))*fl->taminic;
+  }
+  fl->data = realloc(fl->data,(((float)fl->size/fl->taminic))*sizeof(struct aluno));
+
+return 0;
 }
 
 

@@ -19,7 +19,6 @@ typedef struct TLinkedList {
 
 
 TLinkedList* list_create(){//criar lista
-
     TLinkedList *li;
     li = malloc(sizeof(TLinkedList));
     if(li == NULL){
@@ -27,9 +26,9 @@ TLinkedList* list_create(){//criar lista
     }
     li->head = NULL;
     li->end = NULL;
-    li->end->next = li->head;
     li->size = 0;
     li->sorted = 0;
+    
     // TLinkedList vazia tem que apontar para nulo pois ela nao tem elementos
 
     return li;
@@ -83,16 +82,17 @@ int list_push_back(TLinkedList* li, struct aluno al){//insere no final
         return -1;
     }
     novo_no->data = al; // ARMAZENAR o dado que entrou
-    novo_no->next = li->head;//proximo elemento recebe a cabeça para demonstrar lista circular
 
+    novo_no->next = li->head;//proximo elemento recebe a cabeça para demonstrar lista circular
     if(li->head == NULL){
+        li->end = novo_no;
         li->head = novo_no;
         li->end->next = li->head;
         li->size++;
         return SUCCESS;
     }
 
-    
+    li->end->next = novo_no;
     novo_no->next = li->head;
     li->end = novo_no;
     li->size++;
@@ -220,19 +220,27 @@ int list_pop_back(TLinkedList* li){// remove final
         free(li->head);
         li->head = NULL;
         li->end = NULL;
-        li->end->next = li->head;
+        //li->end->next = li->head;
         li->size--;
         return SUCCESS;
     }
     list_node *previous; 
     list_node *aux = li->head;//aux recebe a cabeça
-    int i =1;
+    /*int i = 1;
     while(i < li->size){
       previous = aux;
       aux = aux->next;
+      i++;
     }
-    previous->next = li->head;
-    free(aux->next);
+*/
+    while(aux != li->end){
+      previous = aux;
+      aux = aux->next;
+    }
+    
+    previous->next = li->end->next;
+    li->end = previous;
+    free(aux);
     li->size--;
     return SUCCESS;
 }
@@ -256,10 +264,28 @@ int list_erase(TLinkedList *li, int pos){//remover posição
   else if(pos < i){
     return OUT_OF_RANGE;//não tem essa posição
   } 
-  previous->next = aux->next;//apontar para o proximo da posição que foi removida(aux);
-  free(aux);//remover a posição
+  else if(i == 1){
+    aux = li->head;//aux recebe a cabeça
+    li->head = aux->next;//cabeça recebe a proxima posição
+    li->end->next = li->head;//alterar ponteiro circular
+
+    free(aux);
+    li->size--;
+  }else if(i == li->size){
+  previous->next = li->end->next;
+  li->end = previous;
+  free(aux);
   li->size--;
-  return SUCCESS;
+  }
+  else{
+
+    previous->next = aux->next;
+    free(aux);
+    li->size--;
+
+
+  }
+    return SUCCESS;
 }
 
 int list_erase_mat(TLinkedList *li, int nmat){//remover matricula
@@ -273,17 +299,34 @@ int list_erase_mat(TLinkedList *li, int nmat){//remover matricula
   while(aux->data.matricula != nmat){
     previous = aux;
     aux = aux->next;
+
     i++;
-    if(i >= li->size){
-        return OUT_OF_RANGE;
-    }
   }
+
   if(aux == NULL){
     return OUT_OF_RANGE;
   }
-  previous->next = aux->next;
+  if(i == 1){
+    aux = li->head;//aux recebe a cabeça
+    li->head = aux->next;//cabeça recebe a proxima posição
+    li->end->next = li->head;//alterar ponteiro circular
+
+    free(aux);
+    li->size--;
+  }else if(i == li->size){
+  previous->next = li->end->next;
+  li->end = previous;
   free(aux);
   li->size--;
+  }
+  else{
+
+    previous->next = aux->next;
+    free(aux);
+    li->size--;
+
+
+  }
   return SUCCESS;
 }
 
@@ -397,6 +440,7 @@ int list_print(TLinkedList *li){
     printf("Notas: %.3f %.3f %.3f\n",aux->data.n1,aux->data.n2,aux->data.n3); 
     printf("-------------------------------\n"); 
     aux = aux->next;
+    i++;
   }
 
 return SUCCESS;
