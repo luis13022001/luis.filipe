@@ -3,36 +3,37 @@
 #include <stdlib.h>
 #include <string.h>
 
-void opção(void)
+void opcao(void)
 {
     printf("1 - Criar a Lista  \n");
-    printf("2 - Consultar lista posição  \n");
+    printf("2 - Consultar lista posicao  \n");
     printf("3 - Consultar lista matricula  \n");
     printf("4 - insere no final da lista   \n");
     printf("5 - insere no inicio da lista  \n");
     printf("6 - insere na lista ordenada  \n");
-    printf("7 - remove aluno pela posição  \n");
-    printf("8 - remove a 1° posição da lista  \n");
+    printf("7 - remove aluno pela posicao  \n");
+    printf("8 - remove a 1° posicao da lista  \n");
     printf("9 - Tamanho da lista  \n");
     printf("10 - Consulta cabeça da lista \n");
     printf("11 - consulta ultimo elemento da lista \n");
     printf("12 - Imprime Lista \n");
-    printf("13 - Ver qual posição está uma matricula \n");
+    printf("13 - Ver qual posicao esta uma matricula \n");
     printf("14 - Liberar Lista \n");
-    printf("15 - remove ultima posição \n");
+    printf("15 - remove ultima posicao \n");
     printf("16 - remove matricula \n");
+    printf("17 - pegar proximo elemento \n");
     printf("0 - Sair \n\n");
 }
 unsigned int pegaropcao(void)
 {
     
     unsigned int valor = 0;
-    printf("Escolha uma opção: ");
-    scanf("%u", &valor); //ler o valor da opção
-    while ( !(0 <= valor && valor <= 17))
+    printf("Escolha uma opcao: ");
+    scanf("%u", &valor); //ler o valor da opcao
+    while ( !(0 <= valor && valor <=18))
     {
-    printf("opção inválida!\n");
-    printf("Digite uma opção: ");
+    printf("opcao invalida!\n");
+    printf("Digite uma opcao: ");
     scanf("%d", &valor);
     printf("\n\n");
     }
@@ -47,7 +48,7 @@ void menu()
     int val;
     int pos, mat;
     while(1){
-        opção();
+        opcao();
         switch (pegaropcao())
     {
 
@@ -58,15 +59,15 @@ break;
 
     case 2:
  
-    printf("qual posição voce deseja saber? ");
+    printf("qual posicao voce deseja saber? ");
     scanf("%d", &pos);
     list_find_pos(alunos_ic,pos,&al);
     if(ret == -1 ){
-      printf("ERRO! lista não alocada\n");
+      printf("ERRO! lista nao alocada\n");
       break;
     }
     else if(ret == -4){
-      printf("ERRO! não encontrou matricula\n");
+      printf("ERRO! nao encontrou matricula\n");
       break;
     }
     else{
@@ -83,11 +84,11 @@ break;
     scanf("%d", &mat);
     list_find_mat(alunos_ic,mat,&al);
     if(ret == -1 ){
-      printf("ERRO! lista não alocada\n");
+      printf("ERRO! lista nao alocada\n");
       break;
     }
     else if(ret == -4){
-      printf("ERRO! não encontrou matricula\n");
+      printf("ERRO! nao encontrou matricula\n");
       break;
     }
     else{
@@ -153,7 +154,7 @@ break;
 
 
     case 7:
-    printf("qual posição voce deseja remover? ");
+    printf("qual posicao voce deseja remover? ");
      scanf("%d", &pos);
      ret = list_erase(alunos_ic,pos);
      if(ret == -1 ){
@@ -176,14 +177,14 @@ break;
 
     case 9:
     qtd = list_size(alunos_ic);
-    printf("\nO tamanho da lista é %d\n\n", qtd);
+    printf("\nO tamanho da lista e %d\n\n", qtd);
 break;
 
     case 10:
     ret =list_front(alunos_ic,&al);
     
     if(ret == -1){
-      printf("Erro. lista não alocada ou não preenchida\n\n");
+      printf("Erro. lista nao alocada ou nao preenchida\n\n");
     }
     else{
     printf("\n%s\n", al.nome);
@@ -200,10 +201,10 @@ break;
     
     ret = list_back(alunos_ic,&al);
     if(ret == -1){
-      printf("Erro. lista não alocada ou não preenchida\n\n");
+      printf("Erro. lista nao alocada ou nao preenchida\n\n");
     }
     else if(ret == -3){
-      printf("Erro. não tem nenhum elemento na lista\n\n");
+      printf("Erro. nao tem nenhum elemento na lista\n\n");
     }
     else{
     printf("\n%s\n", al.nome);
@@ -223,13 +224,13 @@ break;
 
   case 13:
 
-  printf("qual matricula voce deseja saber a posição? ");
+  printf("qual matricula voce deseja saber a posicao? ");
     scanf("%d", &mat);
   ret = list_get_pos(alunos_ic, mat, &pos);
   if(ret == -1){
     printf("ERROOO!!\n\n");
   }
-  printf("A posição é %d\n\n", pos);
+  printf("A posicao é %d\n\n", pos);
 
 break;
     case 14:
@@ -251,10 +252,30 @@ break;
       printf("ERROOO!!\n\n");
     }
     else if(ret == -3){
-      printf("não há elementos na lista!!\n\n");
+      printf("nao ha elementos na lista!!\n\n");
     }
     else{
       printf("elemento removido com sucesso!!\n\n");
+    }
+
+break;
+
+    case 17:
+    ret =list_next(alunos_ic,&al);
+    
+    if(ret == -1){
+      printf("Erro. lista nao alocada ou nao preenchida\n\n");
+    }
+    else if(ret == -3){
+    printf("\n%s\n", al.nome);
+    printf("matricula : %d\n", al.matricula);
+    printf("notas P1, P2, P3: %.3f, %.3f, %.3f\n", al.n1, al.n2, al.n3);
+    printf("Chegou ao final da Lista circular!!");
+    }
+    else{
+    printf("\n%s\n", al.nome);
+    printf("matricula : %d\n", al.matricula);
+    printf("notas P1, P2, P3: %.3f, %.3f, %.3f\n", al.n1, al.n2, al.n3);
     }
 
 break;
@@ -267,8 +288,7 @@ break;
     }
 }
 
-int main(void)
-{
+int main(void){
     menu();
     return 0;
 }
