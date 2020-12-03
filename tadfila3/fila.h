@@ -17,6 +17,6 @@ int fila_push(TQueue *fl, struct aluno al);//insere no final
 int fila_pop_front(TQueue*fl);//remove inicio
 int size_queue(TQueue* fl)//tamanho da fila ou se está vazia
 int queue_front(TQueue *fl, struct student *al);//consulta o elemento do começo da fila
-int print_queue(TQueue *fl);
-int compact_queue(TQueue* fl);
+int print_queue(TQueue *fl);//printar fila
+int compact_queue(TQueue* fl);//compactar fila
 int queuefull(TQueue* fl);//ver se está full
