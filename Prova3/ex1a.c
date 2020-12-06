@@ -18,8 +18,8 @@ int list_erase_even(List *li){
           return -1;
         }
       }
-      aux = aux->next;
-      i++;
+      aux = aux->next; // vc apagou aux no erase
+      i++; // valor de i já não representa o nó que será apagado
     }
 
   }
