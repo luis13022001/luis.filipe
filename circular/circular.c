@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "TLinkedList.h"
+#include "circular.h"
 
 typedef struct list_node list_node;
 
@@ -11,22 +11,24 @@ struct list_node{
 };
 
 typedef struct TLinkedList {   
-  list_node *head; 
+  list_node *end;
   int size; // quantidade de elementos na lista 
   int sorted; // indica se a lista é ordenada 
+  int cont;
   }TLinkedList;  
 
 
 TLinkedList* list_create(){//criar lista
-
     TLinkedList *li;
     li = malloc(sizeof(TLinkedList));
     if(li == NULL){
         return li;
     }
-    li->head = NULL;
+    li->end = NULL;
     li->size = 0;
     li->sorted = 0;
+    li->cont = 1;
+    
     // TLinkedList vazia tem que apontar para nulo pois ela nao tem elementos
 
     return li;
@@ -36,14 +38,15 @@ int list_free(TLinkedList *li){//liberar lista
     if(li == NULL){
       return INVALID_NULL_POINTER;
     }
-    list_node *aux = li->head;
+    list_node *aux = li->end;
     list_node *previous = NULL;
-    while(aux != NULL){
+    int i =0;
+    while(i < li->size){
       previous = aux;
       aux = aux->next;
       free(previous);//liberar cada posição
-      li->size--;
     }
+    li->size = 0;
     free(li);
     return SUCCESS;
 }
@@ -54,15 +57,23 @@ int  list_push_front(TLinkedList* li, struct aluno al){//insere começo
   if(li->sorted == 1){
     return ERRO_SORTED;
   }
-    list_node *novo_no = malloc(sizeof(struct list_node));
-    if(novo_no == NULL){//verificar se foi alocado
+
+    list_node *node = malloc(sizeof(struct list_node));
+    node->data = al; // ARMAZENAR o dado que entrou
+    if(node == NULL){//verificar se foi alocado
         return -1;
     }
-    novo_no->data = al; // ARMAZENAR o dado que entrou
-    novo_no->next = li->head;//mover o elemento que estava na cabeça da lista
-    li->head = novo_no;//adicionar o elemento na cabeça da lista
+    else if(li->size == 0){
+      li->end = node;
+      li->end->next = node;
+      li->size++;
+    }
+    else{
+    node->next = li->end->next;
+    li->end->next = node;
     li->size++;
-    return 0;
+    }
+    return SUCCESS;
 }
 
 int list_push_back(TLinkedList* li, struct aluno al){//insere no final
@@ -72,29 +83,24 @@ int list_push_back(TLinkedList* li, struct aluno al){//insere no final
   if(li->sorted == 1){
     return ERRO_SORTED;
   }    
-    list_node *novo_no = malloc(sizeof(struct list_node));
-    if(novo_no == NULL){//verificar se foi alocado
+    list_node *node = malloc(sizeof(struct list_node));
+    if(node == NULL){//verificar se foi alocado
         return -1;
     }
-    novo_no->data = al; // ARMAZENAR o dado que entrou
-    novo_no->next = NULL;//mostrar que o prox elemento depois do elemento inserido vai ser igual a NULL
-
-    if(li->head == NULL){
-        li->head = novo_no;
-        li->size++;
-        return SUCCESS;
+    if(li->size == 0){
+    node->data = al;
+    li->end = node;
+    li->end->next = node;
     }
+    else{
+    list_node *aux;
+    node->data = al; // ARMAZENAR o dado que entrou
 
-
-    list_node *aux = li->head;//para nao mexer com a cabeça criamos um auxiliar para andar na lista
-
-    while(aux->next != NULL){//andar no vetor até achar o final da lista
-        aux = aux->next;
+    node->next = li->end->next;//novo nó aponta para começo da lista
+    li->end->next = node;
+    li->end = node;
     }
-    
-    aux->next = novo_no;
     li->size++;
-
     return SUCCESS;
 
 }
@@ -112,13 +118,23 @@ int list_insert(TLinkedList *li, int pos, struct aluno al){//inserir em uma posi
   } else{
     node->data = al;//receber os valores no nó
     //teste se a lista está vazia
-    if(li->head == NULL){
-      node->next = NULL;//proximo elemento recebe null para informar final da lista
-      li->head = node;// a cabeça aponta pro novo no
-    } else{
+    if(li->size == 0){
+      li->end = node;
+      li->end->next = node;
+    }
+    else if(pos == 1){
+    node->next = li->end->next;
+    li->end->next = node;
+    }
+    else if (pos == li->size){
+    node->next = li->end->next;//novo nó aponta para começo da lista
+    li->end->next = node;
+    li->end = node;
+    } 
+    else{
     //a lista possui pelo menos 1 elemento
     list_node *aux,*previous; // prev apontar para o elemento anterior
-    aux = li->head;//andar na lista precisa do auxiliar
+    aux = li->end->next;
     int i = 0;
     while(pos > i){
       previous = aux;
@@ -146,22 +162,32 @@ int list_insert_sorted(TLinkedList *li, struct aluno al){//insere em lista orden
   } else{
     node->data = al;//receber os valores no nó
     //teste se a lista está vazia
-    if(li->head == NULL){
-      node->next = NULL;//proximo elemento recebe null para informar final da lista
-      li->head = node;// a cabeça aponta pro novo no
+    if(li->size == 0){
+      li->end = node;
+      li->end->next = node;
     } else{
       //a lista possui pelo menos 1 elemento
       list_node *aux,*previous; // prev apontar para o elemento anterior
-      aux = li->head;//andar na lista precisa do auxiliar
-      while(aux != NULL && aux->data.matricula < al.matricula){//aux != NULL para verificar se chegamos no final da lista
+      aux = li->end->next;//andar na lista precisa do auxiliar
+      int i = 1;
+      while(i < li->size && aux->data.matricula < al.matricula){//aux != NULL para verificar se chegamos no final da lista
         previous = aux;// pegar posição anterior para colocar o valor no lugar correto
         aux = aux->next;//vai alterar o aux e vai apontar para o prox
+        i++;
 
       }
-      if( aux == li->head){
-        node->next = li->head;
-        li->head = node;
-      }else{
+      if( aux == li->end->next){
+    node->next = li->end->next;
+    li->end->next = node;
+
+      }
+      else if( aux == li->end){
+    node->next = li->end->next;//novo nó aponta para começo da lista
+    li->end->next = node;
+    li->end = node;
+
+      }
+    else{
       previous->next = node;//previou vai receber endedereço do nó(node)
       node->next = aux;// e o node na proxima posição recebe o aux
     }
@@ -190,13 +216,10 @@ int list_pop_front(TLinkedList *li){//remova começo
     if(li->size == 0){
       return OUT_OF_RANGE;
     }
-    else{
-    list_node *aux = li->head;//aux recebe a cabeça
-    li->head = aux->next;//cabeça recebe a proxima posição
-
-    free(aux);
-    li->size--;
-    }
+  list_node *aux = li->end->next;
+  li->end->next = aux->next;
+  li->size--;
+  free(aux);
     return SUCCESS;
 }
 
@@ -205,18 +228,32 @@ int list_pop_back(TLinkedList* li){// remove final
     if(li == NULL){
       return INVALID_NULL_POINTER;
     }
-    if(li->head->next == NULL){
-        free(li->head);
-        li->head = NULL;
+    if(li->size == 1){
+        free(li->end);
+        free(li->end->next);
+        li->end = NULL;
+        li->end->next = NULL;
+        //li->end->next = li->head;
+        li->size--;
+        return SUCCESS;
     }
     list_node *previous; 
-    list_node *aux = li->head;//aux recebe a cabeça
-    while(aux->next != NULL){
+    list_node *aux = li->end->next;//aux recebe a cabeça
+    /*int i = 1;
+    while(i < li->size){
+      previous = aux;
+      aux = aux->next;
+      i++;
+    }
+*/
+    while(aux != li->end){
       previous = aux;
       aux = aux->next;
     }
-    previous->next = NULL;
-    free(aux->next);
+    
+    previous->next = li->end->next;
+    li->end = previous;
+    free(aux);
     li->size--;
     return SUCCESS;
 }
@@ -227,7 +264,7 @@ int list_erase(TLinkedList *li, int pos){//remover posição
     return INVALID_NULL_POINTER;// lista não alocada
   }
   list_node *aux,*previous; // prev apontar para o elemento anterior
-  aux = li->head;//andar na lista precisa do auxiliar
+  aux = li->end->next;//andar na lista precisa do auxiliar
   int i = 1;
   while(i < pos){
     previous = aux;
@@ -240,31 +277,76 @@ int list_erase(TLinkedList *li, int pos){//remover posição
   else if(pos < i){
     return OUT_OF_RANGE;//não tem essa posição
   } 
-  previous->next = aux->next;//apontar para o proximo da posição que foi removida(aux);
-  free(aux);//remover a posição
+  else if (li->size == 1){
+    free(li->end);
+    free(li->end->next);
+    li->end = NULL;
+    li->end->next = NULL;
+    li->size--;
+    return SUCCESS;
+
+  }
+  else if(pos == 1){
+    aux = li->end->next;//aux recebe a cabeça
+    li->end->next = aux->next;//cabeça recebe a proxima posição
+
+    free(aux);
+    li->size--;
+  }else if(pos == li->size){
+  previous->next = aux->next;
+  li->end = previous;
+  free(aux);
   li->size--;
-  return SUCCESS;
+  }
+  else{
+
+    previous->next = aux->next;
+    free(aux);
+    li->size--;
+
+
+  }
+    return SUCCESS;
 }
 
-int list_erase_mat(TLinkedList *li, int nmat){
+int list_erase_mat(TLinkedList *li, int nmat){//remover matricula
   if(li == NULL){
     return INVALID_NULL_POINTER;// lista não alocada
   }
   list_node *aux,*previous; // prev apontar para o elemento anterior
-  aux = li->head;//andar na lista precisa do auxiliar
+  aux = li->end->next;//andar na lista precisa do auxiliar
  
   int i = 1;
   while(aux->data.matricula != nmat){
     previous = aux;
     aux = aux->next;
+
     i++;
   }
+
   if(aux == NULL){
     return OUT_OF_RANGE;
   }
+  if(i == 1){
+    aux = li->end->next;//aux recebe a cabeça
+    li->end->next = aux->next;//cabeça recebe a proxima posição
+
+    free(aux);
+    li->size--;
+  }else if(i == li->size){
   previous->next = aux->next;
+  li->end = previous;
   free(aux);
   li->size--;
+  }
+  else{
+
+    previous->next = aux->next;
+    free(aux);
+    li->size--;
+
+
+  }
   return SUCCESS;
 }
 
@@ -274,7 +356,7 @@ int list_find_pos(TLinkedList *li, int pos, struct aluno *al){//consulta pos
     return INVALID_NULL_POINTER;// lista não alocada
   }
   list_node *aux; // prev apontar para o elemento anterior
-  aux = li->head;//andar na lista precisa do auxiliar
+  aux = li->end->next;//andar na lista precisa do auxiliar
   int i = 1;
   while(i < pos){
     aux = aux->next;
@@ -295,8 +377,9 @@ int list_find_mat(TLinkedList *li, int nmat, struct aluno *al){//consulta pela m
     return INVALID_NULL_POINTER;// lista não alocada
   }
   list_node *aux; // prev apontar para o elemento anterior
-  aux = li->head;//andar na lista precisa do auxiliar
-  while(aux != NULL && aux->data.matricula != nmat ){
+  aux = li->end->next;//andar na lista precisa do auxiliar
+  int i = 1;
+  while(i < li->size && aux->data.matricula != nmat ){
     aux = aux->next;
   }
   if(aux->data.matricula != nmat){
@@ -313,11 +396,11 @@ int list_front(TLinkedList *li, struct aluno *al){//ver eleemnto 1° posição
   if(li == NULL){
     return INVALID_NULL_POINTER;// lista não alocada
   }
-  if(li->head == NULL){
+  if(li->end->next == NULL){
      return INVALID_NULL_POINTER;
   }
   list_node *aux;
-  aux = li->head;
+  aux = li->end->next;
   *al = aux->data;  
  
  return SUCCESS;
@@ -328,14 +411,12 @@ int list_back(TLinkedList *li, struct aluno *al){// ver ultimo elemento
   if(li == NULL){
     return INVALID_NULL_POINTER;// lista não alocada
   }
-  if(li->head == NULL){
+  if(li->end->next == NULL){
     return OUT_OF_RANGE;
   }
-  list_node *aux;
-  aux = li->head;
-  while(aux->next != NULL){// pegar a prox posição para nao dar erro e acabar pegando o nó NULL
-    aux = aux->next;
-  }
+    list_node *aux;
+  aux = li->end;
+
   *al = aux->data;
 
   return SUCCESS;
@@ -348,7 +429,7 @@ int list_get_pos(TLinkedList *li, int nmat, int *pos){// ver qual posição est�
   int i = 1;
   *pos = i;
   list_node *aux; // prev apontar para o elemento anterior
-  aux = li->head;//andar na lista precisa do auxiliar
+  aux = li->end->next;//andar na lista precisa do auxiliar
   if(nmat == aux->data.matricula){
     return SUCCESS;
   }
@@ -356,10 +437,30 @@ int list_get_pos(TLinkedList *li, int nmat, int *pos){// ver qual posição est�
     aux = aux->next;// andar vetor
     i++;
     *pos = i;
+    if(i >= li->size){
+        return OUT_OF_RANGE;
+    }
   }
  
   return SUCCESS;
 }
+
+int list_next(TLinkedList *li, struct aluno *al){
+  if(li == NULL){
+    return INVALID_NULL_POINTER;
+  }
+  if(li->size == 0){
+    return OUT_OF_RANGE;
+  }
+  if(li->size == 1){
+  li->end = li->end->next;
+  }
+  *al = li->end->next->data;
+  li->end = li->end->next;
+
+  return SUCCESS;
+}
+
 
 
 
@@ -368,13 +469,15 @@ int list_print(TLinkedList *li){
   if(li == NULL){
     return INVALID_NULL_POINTER;// lista não alocada
   }
-  list_node *aux = li->head;
-  while(aux != NULL){
+  list_node *aux = li->end->next;
+  int i = 0;
+  while(i < li->size ){
     printf("Matricula: %d\n",  aux->data.matricula);
     printf("Nome: %s\n",   aux->data.nome);
     printf("Notas: %.3f %.3f %.3f\n",aux->data.n1,aux->data.n2,aux->data.n3); 
     printf("-------------------------------\n"); 
     aux = aux->next;
+    i++;
   }
 
 return SUCCESS;
