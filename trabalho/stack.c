@@ -21,9 +21,7 @@ Stack *create_stack(){
         return fl;
     }
     fl->begin = NULL;
-
     fl->size = 0;
-    // TLinkedList vazia tem que apontar para nulo pois ela nao tem elementos
 
     return fl;
 }
