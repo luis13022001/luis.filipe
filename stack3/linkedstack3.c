@@ -4,8 +4,8 @@
 
 struct Stack{
     char* data;
-    int max;
-    int pos;
+    int max;//tamanho
+    int pos;//posição no vetor
 };
 
 Stack *create_stack(int n){
@@ -28,6 +28,17 @@ Stack *create_stack(int n){
     return st;
 }
 
+int stack_free(Stack *st){
+    if(st == NULL){
+        return INVALID_NULL_POINTER;
+    }
+    else{
+        free(st->data);
+        free(st);
+        return SUCCESS;
+    }
+}
+
 int stack_push(Stack *st, char ch){//insere final
     if(st == NULL){//
         return INVALID_NULL_POINTER;
@@ -35,8 +46,9 @@ int stack_push(Stack *st, char ch){//insere final
     else{
         if(st->pos < st->max){
             st->data[st->pos++] = ch;//aumenta contador
+            st->pos++;
         } else {
-            return -100;
+            return OUT_OF_RANGE;
         }
     }
     return 0;
@@ -48,7 +60,7 @@ int stack_pop(Stack *st){//remove final
     }
     else{
         if(st->pos == 0){
-            return -100;
+            return OUT_OF_RANGE;
         } else {
             st->pos--;
         }
@@ -78,3 +90,5 @@ int stack_top(Stack *st, char *ch){//consultar topo
         return ;
     }
 }
+
+

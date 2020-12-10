@@ -25,4 +25,4 @@ int list_front(TLinkedList *li, struct aluno *al);//ver 1° elemento lista
 int list_back(TLinkedList *li, struct aluno *al);// ver ultimo elemento 
 int list_get_pos(TLinkedList *li, int nmat, int *pos);// ver qual posição está uma matricula
 int list_print(TLinkedList *li);//printar lista 
-int list_next(TLinkedList *li);
+int list_next(TLinkedList *li, struct aluno *al);

@@ -7,11 +7,12 @@
 
 #include "../common/alunos.h"
 
-typedef struct Fila Fila;
+typedef struct TQueue TQueue ;
 
-Fila *create_fila();
-int fila_free(Fila *fl);
-int fila_push(Fila *fl, struct aluno al);//insere no final
-int fila_pop_front(Fila*fl);//remove inicio
-int fila_size(Fila *fl);//tamanho da fila ou se está vazia
-int fila_find(Fila *fl,struct aluno *al);//consulta o elemento do começo da fila
+TQueue *create_queue();
+int free_queue(TQueue *fl);
+int enqueue(TQueue *fl, struct aluno al);//insere no final
+int dequeue(TQueue*fl);//remove inicio
+int size_queue(TQueue *fl);//tamanho da fila ou se está vazia
+int queue_front(TQueue *fl,struct aluno *al);//consulta o elemento do começo da fila
+int print_queue(TQueue *fl);

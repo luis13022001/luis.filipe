@@ -4,12 +4,12 @@
 
 #include "../TLinkedlist2/TLinkedList.h"
 
-struct Fila{
+struct TQueue{
     TLinkedList *data;  
 };
 
-Fila *create_fila(){
-Fila *fl;
+TQueue *create_fila(){
+TQueue *fl;
     fl = malloc(sizeof(Fila));
     if(fl == NULL){
         return INVALID_NULL_POINTER;
@@ -25,7 +25,7 @@ Fila *fl;
     return fl;
 }
 
-int fila_push(Fila *fl, struct aluno al){//insere final
+int enqueue(TQueue *fl, struct aluno al){//insere final
     if(fl == NULL){//
         return INVALID_NULL_POINTER;    
     }
@@ -35,7 +35,7 @@ int fila_push(Fila *fl, struct aluno al){//insere final
 
 }
 
-int fila_pop_front(Fila *fl){//remove comeco
+int dequeue(TQueue *fl){//remove comeco
     if(fl == NULL){
         return INVALID_NULL_POINTER;    
     }
@@ -46,7 +46,7 @@ int fila_pop_front(Fila *fl){//remove comeco
 
 
 
-int fila_size(Fila *fl){//tamanho da pilha
+int size_queue(TQueue *fl){//tamanho da pilha
     if(fl == NULL){
         return INVALID_NULL_POINTER;    
     }
@@ -57,7 +57,7 @@ int fila_size(Fila *fl){//tamanho da pilha
 
 }
 
-int fila_find(Fila *fl,struct aluno *al){//consultar topo
+int queue_front(TQueue *fl,struct aluno *al){//consultar topo
      if(st == NULL){
         return INVALID_NULL_POINTER;    
     }
@@ -67,7 +67,7 @@ int fila_find(Fila *fl,struct aluno *al){//consultar topo
 
 }
 
-int fila_free(Fila *fl){//libera lista e pilha
+int free_queue(TQueue *fl){//libera lista e pilha
  if(fl == NULL){
    return -1;
  }else{
@@ -75,4 +75,13 @@ int fila_free(Fila *fl){//libera lista e pilha
   free(fl);   
   return SUCCESS;
  }
+}
+
+int print_queue(TQueue *fl){
+    if(fl == NULL){
+   return -1;
+ }else{
+    list_print(fl->data);
+ }
+ return SUCCESS;
 }

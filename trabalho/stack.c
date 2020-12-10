@@ -1,43 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fila.h"
+#include "stack.h"
 
 typedef struct list_node list_node;
 struct list_node{
-    struct aluno data;    
+    struct Ponto data;    
     list_node *next;
 };
 
-struct TQueue{
+struct Stack{
     list_node *begin; 
-    list_node *end;
     int size; // quantidade de elementos na lista 
     int inf;    
 };
 
-TQueue *create_queue(){
-    TQueue *fl;
-    fl = malloc(sizeof(TQueue));
+Stack *create_stack(){
+    Stack *fl;
+    fl = malloc(sizeof(Stack));
     if(fl == NULL){
         return fl;
     }
     fl->begin = NULL;
-    fl->end = NULL;
+
     fl->size = 0;
     // TLinkedList vazia tem que apontar para nulo pois ela nao tem elementos
 
     return fl;
 }
 
-int free_queue(TQueue *fl){
+int stack_free(Stack *fl){
     if(fl == NULL){
    return INVALID_NULL_POINTER;
  }else{
     list_node *aux = fl->begin;
-    while(aux != NULL){
-      fl->end = aux;
-      aux = aux->next;
-      free(fl->end);//liberar cada posição
+    while(fl->size != 0){
+      fl->begin = aux->next;
+      free(aux);//liberar cada posição
+      aux = fl->begin;
       fl->size--;
     }
     free(fl);
@@ -45,7 +44,7 @@ int free_queue(TQueue *fl){
 }
 }
 
-int enqueue(TQueue *fl, struct aluno al){
+int stack_push(Stack *fl, struct Ponto al){
     if (fl == NULL){
     return INVALID_NULL_POINTER;
   }
@@ -56,30 +55,16 @@ int enqueue(TQueue *fl, struct aluno al){
     {
       return OUT_OF_MEMORY;
     }
-    else{
       node->data = al;
-      node->next = NULL;
-    }
-    //ver se a lista está vazia
-     if (fl->size == 0)
-    {
-      fl->begin = node;
-      fl->end = node;
-      fl->size++;
-      return SUCCESS;
-    }
-    else
-    {
-      fl->end->next = node;
-      fl->end = node;
-      fl->size++;
-    }
+      node->next = fl->begin;
+     fl->begin = node;
+    fl->size++;
     return SUCCESS;
 
   }
 }
 
-int dequeue(TQueue*fl){
+int stack_pop(Stack *fl){
     if(fl == NULL){
       return INVALID_NULL_POINTER;
     }
@@ -96,7 +81,7 @@ int dequeue(TQueue*fl){
 
 }
 
-int size_queue(TQueue *fl){
+int stack_size(Stack *fl){
     if(fl == NULL){
         return INVALID_NULL_POINTER;
     }
@@ -105,7 +90,7 @@ int size_queue(TQueue *fl){
     }
 }
 
-int queue_front(TQueue *fl,struct aluno *al){
+int stack_find(Stack *fl,struct Ponto *al){
     if(fl == NULL){
         return INVALID_NULL_POINTER;
     }
@@ -119,17 +104,4 @@ int queue_front(TQueue *fl,struct aluno *al){
     return SUCCESS;
 }
 
-int print_queue(TQueue *fl){
-  if(fl == NULL){
-    return INVALID_NULL_POINTER;    
-  }
-  int i;
-  for(i =0;   i< fl->size; i++){
-  printf("Matricula: %d\n",fl->data[i].matricula);
-  printf("Nome: %s\n",   fl->data[i].nome);
-  printf("Notas: %f %f %f\n",fl->data[i].n1,fl->data[i].n2,fl->data[i].n3);       
-  printf("-------------------------------\n");} 
-
-return 0;
-}
 

@@ -118,6 +118,9 @@ int size_queue(TQueue* fl){
    if(fl== NULL){        
   return INVALID_NULL_POINTER;
   }
+  if(fl->size <= 0){
+    return OUT_OF_RANGE;
+  }
   return fl->size;
 }
 
@@ -134,57 +137,16 @@ int queuefull(TQueue* fl){
 }
 
 
-int queue_compact(TQueue* fl){
-if(fl == NULL) //Se não tiver sido carregada
-return -1;
-
- if(fl->size == 0)
- return INVALID_NULL_POINTER;
-
- int quantidade; //recebe qtd como float
- quantidade = fl->size; //Para usar ceil a qtd deveria ser float
-
- int count = 0;
-  if(fl->front < fl->rear){
-    while(count < fl->size){
-      fl->data[count] = fl->data[fl->front];
-      count++;
-      fl->front++;
-    }
-    fl->front = 0;
-    fl->rear = fl->size;
-    fl->size = (ceil((float)quantidade/fl->taminic))*fl->taminic;
-    return 0;
-  }else if(fl->front > fl->rear){
-    struct aluno temp[fl->size];
-    while(fl->front < fl->size){
-        temp[count] = fl->data[fl->front];
-        count++;
-        fl->front++;
-    }
-    int count2 = 0;
-    while(count2 < fl->rear){
-      temp[count] = fl->data[count2];
-      count++;
-      count2++;
-    }
-    for(count = 0; count < fl->size; count++){
-      fl->data[count] = temp[count];
-/*printf("     %d\t    %s\t%.3f\t\t%.3f\t\t%.3f\n",
-fl->data[count].matricula,
-fl->data[count].nome,fl->data[count].n1,
-fl->data[count].n2,
-fl->data[count].n3);
-printf("\n");
+int compact_queue(TQueue* fl){
+  struct aluno *newlist;
+  if(fl == NULL)
+    return INVALID_NULL_POINTER;
+  int aux = ceil(fl->size/fl->taminic)*fl->taminic;
+  fl->tamatual = aux;
+  newlist = realloc(fl->data,aux*sizeof(struct aluno));
+  fl->data = newlist;
   
-  */  }
-    fl->front = 0;
-    fl->rear = fl->size;
-    fl->size = (ceil((float)quantidade/fl->taminic))*fl->taminic;
-  }
-  fl->data = realloc(fl->data,(((float)fl->size/fl->taminic))*sizeof(struct aluno));
-
-return 0;
+  return SUCCESS;
 }
 
 

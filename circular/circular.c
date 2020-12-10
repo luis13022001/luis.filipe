@@ -12,9 +12,9 @@ struct list_node{
 
 typedef struct TLinkedList {   
   list_node *end;
+  list_node *nextno;
   int size; // quantidade de elementos na lista 
   int sorted; // indica se a lista é ordenada 
-  int cont;
   }TLinkedList;  
 
 
@@ -26,8 +26,8 @@ TLinkedList* list_create(){//criar lista
     }
     li->end = NULL;
     li->size = 0;
+    li->nextno = NULL;
     li->sorted = 0;
-    li->cont = 1;
     
     // TLinkedList vazia tem que apontar para nulo pois ela nao tem elementos
 
@@ -453,10 +453,13 @@ int list_next(TLinkedList *li, struct aluno *al){
     return OUT_OF_RANGE;
   }
   if(li->size == 1){
-  li->end = li->end->next;
+  li->nextno = li->end->next;
   }
-  *al = li->end->next->data;
-  li->end = li->end->next;
+  else{
+ li->nextno = li->nextno>next;
+  }
+  *al = li->nextno->data;
+ 
 
   return SUCCESS;
 }

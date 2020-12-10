@@ -16,10 +16,10 @@ void opcao(void)
 unsigned int pegaropcao(void)
 {
     
-    unsigned int valor = 0;
+    int valor = 0;
     printf("Escolha uma opção: ");
     scanf("%u", &valor); //ler o valor da opção
-    while ( !(0 <= valor && valor <= 15))
+    while ( !(0 <= valor && valor <= 6))
     {
     printf("opção inválida!\n");
     printf("Digite uma opção: ");

@@ -6,7 +6,7 @@ struct TMat2D
 {
   int nrows; // número de linhas
   int ncolumns; // número de colunas
-  unsigned char *data; // ponteiro para os dados da matriz
+  int *data; // ponteiro para os dados da matriz
 };
 
 
@@ -24,7 +24,7 @@ TMat2D *mat2D_create(int nrows, int ncolumns){
     return NULL;
   }
  
-  mat->data = malloc(sizeof(unsigned char)*nrows*ncolumns); 
+  mat->data = malloc(sizeof(int)*nrows*ncolumns); 
   if (mat->data == NULL){
       free(mat);
       return NULL;
@@ -32,6 +32,11 @@ TMat2D *mat2D_create(int nrows, int ncolumns){
 
   mat->nrows = nrows;
   mat->ncolumns = ncolumns;
+    for(int i = 0; i < mat->nrows; i++){
+      for(int j = 0; j < mat->ncolumns; j++){
+        mat->data[j * mat->nrows + i] = 0;
+      }
+  }
 
    
   return mat;
@@ -52,7 +57,7 @@ int mat2D_free(TMat2D *mat){
 
 }
 
-int mat2D_set_value(TMat2D *mat, int i, int j, unsigned char val){
+int mat2D_set_value(TMat2D *mat, int i, int j, int val){
     if (mat == NULL){
     return -1;
   }
@@ -70,8 +75,8 @@ int mat2D_set_value(TMat2D *mat, int i, int j, unsigned char val){
 
 
 
-int mat2D_get_value(TMat2D *mat, int i, int j, unsigned char *val){
-       if (mat == NULL){
+int mat2D_get_value(TMat2D *mat, int i, int j, int *val){
+    if (mat == NULL){
     return -1;
   }
     if (mat->data == NULL){
@@ -88,7 +93,7 @@ int mat2D_get_value(TMat2D *mat, int i, int j, unsigned char *val){
 
 
 
-int  mat2D_somalinhas(TMat2D *mat,unsigned char **vet){
+int  mat2D_somalinhas(TMat2D *mat,int **vet){
     if(mat == NULL){
         return -1;
     }
@@ -101,11 +106,11 @@ int  mat2D_somalinhas(TMat2D *mat,unsigned char **vet){
 }
 
 
-int  mat2D_somacols(TMat2D *mat,unsigned char **vet){
+int  mat2D_somacols(TMat2D *mat,int **vet){
     if(mat == NULL){
         return -1;
     }
-    (*vet) =malloc(mat->ncolumns*sizeof(unsigned char));
+    (*vet) =malloc(mat->ncolumns*sizeof(int));
     for(int j = 0; j <= mat->ncolumns; j++){
     for(int i = 0; i <= mat->nrows; i++){
          (*vet)[i] += mat->data[i * mat->nrows + j];
@@ -114,11 +119,23 @@ int  mat2D_somacols(TMat2D *mat,unsigned char **vet){
     return 0;
 }
 
+int mat2D_get_lincol(TMat2D *mat, int *lin, int *col){
+    if (mat == NULL){
+    return -1;
+  }
+    if (mat->data == NULL){
+      return -1;
+  } 
+  *lin = mat->nrows;
+  *col = mat->ncolumns;
+  return EXIT_SUCCESS;
+}
+
 void exibirMatriz(TMat2D *mat){
 	int i, j;
 	for(i = 0; i < mat->nrows; i++){
 		for(j = 0; j < mat->ncolumns; j++){
-			printf("%3.hhu ", mat->data[j * mat->nrows + i]);
+			printf("%3d ", mat->data[j * mat->nrows + i]);
 		}
 		printf("\n");
 	}

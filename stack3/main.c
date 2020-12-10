@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 int bem_formada(Stack *pilha, char string[]){
     int i = 0;
     for(i = 0; i<strlen(string); i++){
@@ -144,8 +145,8 @@ int main(void){
 
     char array[20];
 
-    gets(array);
-    puts(array);
+    gets(array);//pegar a string
+    puts(array);//printar
 
 /*    int x = bem_formada(pilha, array);
     if(x == 0){
